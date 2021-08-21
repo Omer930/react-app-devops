@@ -1,20 +1,25 @@
-# pull official base image
-FROM node:13.12.0-alpine
+# Stage 0, "build-stage", based on Node.js, to build and compile the frontend
+FROM tiangolo/node-frontend:10 as build-stage
 
-# set working directory
 WORKDIR /app
 
-# add `/app/node_modules/.bin` to $PATH
-ENV PATH /app/node_modules/.bin:$PATH
+COPY package*.json /app/
 
-# install app dependencies
-COPY package.json ./
-COPY package-lock.json ./
-RUN npm install --silent
-RUN npm install react-scripts@3.4.1 -g --silent
+RUN npm install
 
-# add app
-COPY . ./
+COPY . /app
 
-# start app
-CMD ["npm", "start"]
+RUN npm run build
+
+
+# Stage 1, based on Nginx, to have only the compiled app, ready for production with Nginx
+FROM nginx:1.15
+
+COPY --from=build-stage /app/build/ /usr/share/nginx/html
+
+# Copy the default nginx.conf provided by tiangolo/node-frontend
+COPY --from=build-stage /nginx.conf /etc/nginx/conf.d/default.conf
+
+EXPOSE 8085
+
+ENTRYPOINT ["nginx", "-g", "daemon off;"]
