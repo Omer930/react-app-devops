@@ -12,10 +12,10 @@ pipeline {
             steps {
                   sh '''#!/bin/bash
                   docker run -d -p 8087:80 jenkinapp 
-                  node --version
             }
         }
       
     }
 }
+
 
