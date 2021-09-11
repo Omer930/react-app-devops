@@ -1,5 +1,10 @@
 pipeline {
-    agent any
+    agent any 
+    environment {
+        dockerImage = ''
+        registry = 'omer112288/test'
+          registryCredential = 'dockerhub_id'
+    }
 
     stages {
         stage('build') {
@@ -7,15 +12,23 @@ pipeline {
                 sh 'npm install'
             }
         }
-       stage('Image Build') {
-            agent { dockerfile true }
-            steps {
-               sh '''#!/bin/bash
-                 git clone https://github.com/Omer930/react-app-devops.git '''
-            }
+     stage('Python Image Build') {
+      steps{
+        script {
+          dockerImage = docker.build registry
         }
+      }
+      }
+              stage('Docker Run') {
+         steps{
+         script {
+            dockerImage.run("-p 8087:80 --rm --name reactappContainer")
+         }
+      }
+    }
       
     }
 }
+
 
 
