@@ -1,25 +1,35 @@
-# Stage 0, "build-stage", based on Node.js, to build and compile the frontend
-FROM tiangolo/node-frontend:10 as build-stage
+# pull the base image
+
+FROM node:alpine
+
+
+# set the working direction
 
 WORKDIR /app
 
-COPY package*.json /app/
+
+# add `/app/node_modules/.bin` to $PATH
+
+ENV PATH /app/node_modules/.bin:$PATH
+
+
+# install app dependencies
+
+COPY package.json ./
+
+
+COPY package-lock.json ./
+
 
 RUN npm install
 
-COPY . /app
 
-RUN npm run build
+# add app
+
+COPY . ./
 
 
-# Stage 1, based on Nginx, to have only the compiled app, ready for production with Nginx
-FROM nginx:1.15
+# start app
 
-COPY --from=build-stage /app/build/ /usr/share/nginx/html
+CMD ["npm", "start"]
 
-# Copy the default nginx.conf provided by tiangolo/node-frontend
-COPY --from=build-stage /nginx.conf /etc/nginx/conf.d/default.conf
-
-EXPOSE 8087
-
-ENTRYPOINT ["nginx", "-g", "daemon off;"]
