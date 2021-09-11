@@ -7,10 +7,12 @@ pipeline {
                 sh 'npm install'
             }
         }
-         stage('Image Build') {
+       stage('Image Build') {
             agent { dockerfile true }
             steps {
-                sh 'node --version'
+                  sh '''#!/bin/bash
+                  docker run -d -p 8087:80 jenkinapp 
+                  node --version
             }
         }
       
