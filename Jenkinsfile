@@ -1,12 +1,12 @@
-  pipeline {
+pipeline {
     agent any
 
     stages {
-        stage('CheckOut2') {
+        stage('build') {
             steps {
-                sh 'Checkout from react app'
+                sh 'npm install'
             }
         }
     }
 }
-    
+
