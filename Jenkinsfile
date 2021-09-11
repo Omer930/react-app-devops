@@ -11,7 +11,7 @@ pipeline {
             agent { dockerfile true }
             steps {
                sh '''#!/bin/bash
-                 docker run -d -p 8087:80 jenkinapp '''
+                 git clone https://github.com/Omer930/react-app-devops.git '''
             }
         }
       
