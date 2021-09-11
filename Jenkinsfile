@@ -9,7 +9,7 @@ pipeline {
         }
         
         stage('Image Build') {
-            agent { dockerfile true }
+            agent { Dockerfile true }
             steps {
                 sh 'node --version'
             }
