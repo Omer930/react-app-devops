@@ -12,7 +12,7 @@ pipeline {
                 sh 'npm install'
             }
         }
-     stage('Python Image Build') {
+     stage('React Image Build') {
       steps{
         script {
           dockerImage = docker.build registry
