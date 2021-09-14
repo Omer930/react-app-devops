@@ -14,7 +14,7 @@ pipeline {
         }
         stage('Sonarscanner') {
             steps {
-                nodejs('NodeJs'){
+                //nodejs('NodeJs'){
                     sh 'node sonarqube-scanner.js'
                 } 
             }
