@@ -5,6 +5,13 @@ pipeline {
         registry = 'omer112288/test'
           registryCredential = 'dockerhub_id'
     }
+   stage('Sonarscanner') {
+            steps {
+                nodejs('NodeJs'){
+                    sh 'node sonarqube-scanner.js'
+                } 
+            }
+       }
 
     stages {
         stage('build') {
