@@ -14,9 +14,9 @@ pipeline {
         }
         stage('Sonarscanner') {
             steps {
-                //nodejs('NodeJs'){
+               
                     sh 'node sonarqube-scanner.js'
-                } 
+                
             }
        }
      stage('React Image Build') {
