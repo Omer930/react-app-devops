@@ -1,0 +1,23 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 663319559600.dkr.ecr.us-east-1.amazonaws.com
+      - IMAGE_REPO_NAME=663319559600.dkr.ecr.us-east-1.amazonaws.com/react-app-devops:latest
+      - IMAGE_TAG="$$(git log -1 --pretty=%!H(MISSING))"
+      - AWS_ACCOUNT_ID=663319559600
+
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Building the Docker image...
+      - docker build -t $IMAGE_REPO_NAME:latest .
+      - docker tag $IMAGE_REPO_NAME:latest $IMAGE_REPO_NAME:02-D
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Pushing the Docker image...
+      - docker push $IMAGE_REPO_NAME:02-D
+      - docker push $IMAGE_REPO_NAME:latest
